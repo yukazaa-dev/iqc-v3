@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yukazaa offc iPhone Chat Maker</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+/* ================= BACKGROUND ================= */
+/* GANTI URL GAMBAR DI SINI */
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),
+    url('https://files.catbox.moe/95f0hn.jpg');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  display:flex;
+  justify-content:center;
+  padding:20px;
+  color:#fff;
+  overflow:hidden;
+}
+
+/* ================= RAIN ================= */
+.rain{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+
+.drop{
+  position:absolute;
+  top:-30px;
+  width:1px;
+  height:18px;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,.7),
+    rgba(255,255,255,0)
+  );
+  animation:fall linear infinite;
+  opacity:.6;
+}
+
+@keyframes fall{
+  from{
+    transform:translateY(-20vh) translateX(0);
+  }
+  to{
+    transform:translateY(120vh) translateX(-60px);
+  }
+}
+
+/* ================= CONTENT ================= */
+.wrapper{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:380px;
+}
+
+/* ================= UI ================= */
+h1{
+  text-align:center;
+  margin:25px 0;
+  font-size:1.4rem;
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
+}
+
+.card{
+  background:rgba(255,255,255,.12);
+  border-radius:16px;
+  padding:18px;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.2);
+}
+
+label{
+  font-size:.85rem;
+  opacity:.85;
+}
+
+input,button{
+  width:100%;
+  padding:9px;
+  margin:6px 0;
+  border-radius:10px;
+  border:none;
+  font-size:.95rem;
+}
+
+input{
+  background:rgba(255,255,255,.18);
+  color:#fff;
+}
+input::placeholder{color:#eee}
+
+button{
+  background:rgba(0,0,0,.65);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+img{
+  display:none;
+  margin-top:12px;
+  max-width:100%;
+  border-radius:14px;
+}
+
+#download{
+  display:none;
+  margin-top:8px;
+  padding:9px;
+  text-align:center;
+  border-radius:10px;
+  background:rgba(0,0,0,.65);
+  color:#fff;
+  text-decoration:none;
+}
+
+footer{
+  margin-top:15px;
+  text-align:center;
+  font-size:.75rem;
+  opacity:.6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- RAIN -->
+<div class="rain" id="rain"></div>
+
+<div class="wrapper">
+  <h1>IQC MAKER</h1>
+
+  <div class="card">
+    <label>Pesan Kamu</label>
+    <input id="text" type="text" placeholder="Masukkan teks chat...">
+
+    <label>Jam</label>
+    <input id="time" type="text" value="12.00">
+
+    <label>Baterai (%)</label>
+    <input id="battery" type="number" value="90">
+
+    <label>Operator</label>
+    <input id="carrier" type="text" value="AXIS">
+
+    <button id="generate">Generate</button>
+
+    <img id="result">
+    <a id="download" download="iphone-chat.png">Download Gambar</a>
+  </div>
+
+  <footer>© Yukazaa offc 2025</footer>
+</div>
+
+<script>
+/* ===== RAIN (REALISTIC DIAGONAL) ===== */
+const rain = document.getElementById('rain')
+for(let i=0;i<80;i++){
+  const d = document.createElement('div')
+  d.className = 'drop'
+  d.style.left = Math.random()*100 + 'vw'
+  d.style.animationDuration = (0.9 + Math.random()*1.2) + 's'
+  d.style.animationDelay = Math.random()*3 + 's'
+  rain.appendChild(d)
+}
+
+/* ===== GENERATE (STABIL) ===== */
+document.getElementById('generate').addEventListener('click',()=>{
+  const text = document.getElementById('text').value.trim()
+  if(!text) return alert('Masukkan teks')
+
+  const time = document.getElementById('time').value || '12.00'
+  const battery = document.getElementById('battery').value || '90'
+  const carrier = document.getElementById('carrier').value || 'AXIS'
+
+  const api = `https://brat.siputzx.my.id/iphone-quoted?time=${encodeURIComponent(time)}&batteryPercentage=${encodeURIComponent(battery)}&carrierName=${encodeURIComponent(carrier)}&messageText=${encodeURIComponent(text)}&emojiStyle=apple`
+
+  const img = document.getElementById('result')
+  const dl = document.getElementById('download')
+
+  img.src = api
+  img.style.display = 'block'
+  img.onload = ()=>{
+    dl.href = api
+    dl.style.display = 'block'
+  }
+})
+</script>
+
+</body>
+</html>
